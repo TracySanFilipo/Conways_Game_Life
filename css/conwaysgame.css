@@ -1,14 +1,13 @@
 table, tr, td{
     border: 1px solid black;
+    border-collapse: collapse;
 }
 tr, td{
-    width: 15px;
-    height: 15px;
+    width: 10px;
+    height: 10px;
+    background-color: #e6e6ff;
 }
 
 .alive{
-    background-color: #4dff4d;
+    background-color: #000099;
     }
-.dead{
-    background-color: #ffffb3
-}

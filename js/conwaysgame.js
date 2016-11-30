@@ -1,38 +1,23 @@
-
-function createSpace(){
-    var rows = 50
-    var columns = 50
-    var $table = $("<table>")
-    $("#world").empty()
-    $("#world").append($table)
-    for(var row = 0; row < rows; row++){
-        var $row = $("<tr>")
-        $table.append($row)
-        console.log($row)
-        for(var cell = 50; cell > 0; cell--){
-            var $cell = $("<td>")
-            $cell.click(insertLife)
-            $row.append($cell)
-            $cell.attr("id", row + "_" + cell)
-        }
-    }
+function insertLife(){
+    $(this).addClass("alive")
 }
 
-function insertLife(organism){
-    console.log(organism)
-    $(organism).addClass("alive")
-}
-
-function beginTime(){
+function toggleTime(){
     if(!clock){
-        clock = setInterval(lifeDeath(), 2000)
+        clock = setInterval(lifeDeath, 2000)
+    }
+    else{
+        clearInterval(clock)
+        clock = 0
     }
 }
 
-function examineSurroundings(organelle){
-    console.log(organelle.attr("id").split("_"))
-    var x = parseInt(organelle.attr("id").split("_")[0])
-    var y = parseInt(organelle.attr("id").split("_")[1])
+function examineSurroundings(cell){
+    if (!cell.attr("id")){
+        return 0
+    }
+    var x = parseInt(cell.attr("id").split("_")[0])
+    var y = parseInt(cell.attr("id").split("_")[1])
     var count = 0
     var surroundings = [$("#" + (x - 1) + "_" + (y - 1)),
                         $("#" + (x + 1) + "_" + (y + 1)),
@@ -43,31 +28,39 @@ function examineSurroundings(organelle){
                         $("#" + (x + 1) + "_" + y),
                         $("#" + x + "_" + (y + 1)),
                         ]
-    for(var n = 0; n < surroundings.length; i++){
-        if (surroundings[n].hasClass("alive")){
+    for(var i = 0; i < surroundings.length; i++){
+        if (surroundings[i].hasClass("alive")){
             count++
         }
     }
+    return count
 }
 
 function lifeDeath(){
-    var parallel_rows = 5000
+    var current_table = $("#planet")
+    var parallel_rows = 30
+    var parallel_col = 30
     var $parallel_table = $("<table>")
-    $("#universe2d").append($parallel_table)
-    for(var row = 0; row < parallel_rows; row++){
+    for(var parallel_row = 0; parallel_row < parallel_rows; parallel_row++){
         var $parallel_row = $("<tr>")
         $parallel_table.append($parallel_row)
-        console.log($parallel_row)
-        for(var cell = 5000; cell > 0; cell--) {
+        for(var parallel_cell = 0; parallel_cell < parallel_col; parallel_cell++) {
             var $parallel_cell = $("<td>")
             $parallel_row.append($parallel_cell)
-            $parallel_cell.attr("id", row + "_" + cell)
-            var eco = examineSurroundings($td.getElementById(row + "_" + cell))
-
+            $parallel_cell.attr("id", parallel_row + "_" + parallel_cell)
+            var eco = examineSurroundings($('#'+parallel_row + "_" + parallel_cell))
+            console.log(eco)
+            $parallel_cell.click(insertLife)
+            if (eco == 3 ||(eco == 2 && $('#'+parallel_row + "_" + parallel_cell).hasClass("alive"))){
+                $parallel_cell.addClass("alive")
+            }
         }
     }
+    $("#world").empty()
+    $("#world").append($parallel_table)
 }
 
 
-$("#drawButton").click(createSpace)
-$("#timeButton").click(beginTime)
+var clock = false
+$("#drawButton").click(lifeDeath)
+$("#timeButton").click(toggleTime)
