@@ -1,0 +1,14 @@
+table, tr, td{
+    border: 1px solid black;
+}
+tr, td{
+    width: 15px;
+    height: 15px;
+}
+
+.alive{
+    background-color: #4dff4d;
+    }
+.dead{
+    background-color: #ffffb3
+}
